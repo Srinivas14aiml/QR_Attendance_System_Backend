@@ -7,6 +7,7 @@ import com.smartattendance.service.AttendanceService;
 import com.smartattendance.service.AttendanceSessionService;
 import com.smartattendance.util.QrCodeGenerator;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -20,10 +21,16 @@ public class SessionController {
 
     private final AttendanceSessionService sessionService;
     private final AttendanceService attendanceService;
+    private final String frontendBaseUrl;
 
-    public SessionController(AttendanceSessionService sessionService, AttendanceService attendanceService) {
+    public SessionController(
+            AttendanceSessionService sessionService,
+            AttendanceService attendanceService,
+            @Value("${app.frontend-base-url:http://localhost:3000}") String frontendBaseUrl
+    ) {
         this.sessionService = sessionService;
         this.attendanceService = attendanceService;
+        this.frontendBaseUrl = frontendBaseUrl;
     }
 
     @PreAuthorize("hasAuthority('ROLE_TEACHER')")
@@ -68,7 +75,7 @@ public class SessionController {
         AttendanceSession session = sessionService.getById(targetId);
         sessionService.validateTeacherOwnership(session, userDetails.getUser());
 
-        String attendanceUrl = "http://localhost:3000/?page=student&token=" + session.getQrToken();
+        String attendanceUrl = frontendBaseUrl.replaceAll("/+$", "") + "/?page=student&token=" + session.getQrToken();
         String base64 = QrCodeGenerator.toBase64Png(attendanceUrl, 320, 320);
         return ResponseEntity.ok(new AttendanceDtos.GenerateQrResponse(
                 session.getId(),
