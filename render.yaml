@@ -9,9 +9,9 @@ services:
       - key: SPRING_JPA_HIBERNATE_DDL_AUTO
         value: update
       - key: SPRING_DATASOURCE_URL
-        sync: false
+        value: jdbc:postgresql://dpg-d6g155o8tnhs73d6qekg-a/devalla_srinivas
       - key: SPRING_DATASOURCE_USERNAME
-        sync: false
+        value: devalla_srinivas_user
       - key: SPRING_DATASOURCE_PASSWORD
         sync: false
       - key: APP_JWT_SECRET
