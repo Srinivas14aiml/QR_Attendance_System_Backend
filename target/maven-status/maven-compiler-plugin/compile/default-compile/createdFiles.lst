@@ -27,6 +27,7 @@ com\smartattendance\model\UserRole.class
 com\smartattendance\service\AttendanceSessionService.class
 com\smartattendance\repository\UserRepository.class
 com\smartattendance\dto\AttendanceDtos$SessionStatsResponse.class
+com\smartattendance\controller\HomeController.class
 com\smartattendance\dto\AttendanceDtos$GenerateQrResponse.class
 com\smartattendance\dto\AttendanceDtos$StudentSessionResponse.class
 com\smartattendance\service\AiService$RiskAssessment.class
