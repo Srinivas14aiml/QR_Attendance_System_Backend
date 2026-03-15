@@ -1,7 +1,6 @@
 services:
   - type: web
     name: qr-attendance-backend
-    env: java
     plan: free
     buildCommand: mvn clean package -DskipTests
     startCommand: java -jar target/qr-attendance-1.0.0.jar
