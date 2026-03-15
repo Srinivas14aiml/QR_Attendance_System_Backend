@@ -42,6 +42,7 @@ public class SecurityConfig {
                 .and()
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/", "/error").permitAll()
                         .requestMatchers("/api/auth/**", "/h2-console/**").permitAll()
                         .requestMatchers("/api/submit-attendance", "/api/attendance/submit").permitAll()
                         .requestMatchers("/api/student-session/**", "/api/ai/proxy-check").permitAll()
