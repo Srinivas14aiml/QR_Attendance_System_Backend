@@ -26,7 +26,7 @@ public class SessionController {
     public SessionController(
             AttendanceSessionService sessionService,
             AttendanceService attendanceService,
-            @Value("${app.frontend-base-url:http://localhost:3000}") String frontendBaseUrl
+            @Value("${app.frontend-base-url:https://qr-attendance-system-frontend.vercel.app/}") String frontendBaseUrl
     ) {
         this.sessionService = sessionService;
         this.attendanceService = attendanceService;
