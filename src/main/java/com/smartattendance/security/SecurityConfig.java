@@ -67,21 +67,26 @@ public class SecurityConfig {
         return config.getAuthenticationManager();
     }
 
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-        List<String> allowedOriginPatterns = new ArrayList<>(List.of(
-                
-                "https://qr-attendance-system-frontend.vercel.app"
-        ));
-        allowedOriginPatterns.add(frontendBaseUrl);
-        configuration.setAllowedOriginPatterns(allowedOriginPatterns);
-        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        configuration.setAllowedHeaders(List.of("Authorization", "Content-Type", "Accept"));
-        configuration.setAllowCredentials(true);
+  @Bean
+public CorsConfigurationSource corsConfigurationSource() {
 
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
-    }
+    CorsConfiguration configuration = new CorsConfiguration();
+
+    configuration.setAllowedOrigins(List.of(
+        "https://qr-attendance-system-frontend.vercel.app"
+    ));
+
+    configuration.setAllowedMethods(List.of(
+        "GET", "POST", "PUT", "DELETE", "OPTIONS"
+    ));
+
+    configuration.setAllowedHeaders(List.of("*"));
+
+    configuration.setAllowCredentials(true);
+
+    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+    source.registerCorsConfiguration("/**", configuration);
+
+    return source;
+}
 }
