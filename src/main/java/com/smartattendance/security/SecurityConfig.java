@@ -71,8 +71,7 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         List<String> allowedOriginPatterns = new ArrayList<>(List.of(
-                "http://localhost:3000",
-                "http://127.0.0.1:3000",
+                
                 "https://qr-attendance-system-frontend.vercel.app"
         ));
         allowedOriginPatterns.add(frontendBaseUrl);
