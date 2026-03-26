@@ -80,36 +80,54 @@ public class SessionController {
         );
     }
 
-    // ✅ GENERATE QR (UPDATED WITH YOUR VERCEL URL)
+    // ✅ GENERATE QR (FINAL FIXED VERSION)
     @PreAuthorize("hasAuthority('ROLE_TEACHER')")
     @GetMapping("/{id}/qr")
-    public ResponseEntity<AttendanceDtos.GenerateQrResponse> generateQr(
+    public ResponseEntity<?> generateQr(
             @PathVariable Long id,
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
-        AttendanceSession session = sessionService.getById(id);
+        try {
+            AttendanceSession session = sessionService.getById(id);
 
-        if (session == null) {
-            return ResponseEntity.notFound().build();
+            if (session == null) {
+                return ResponseEntity.badRequest().body("Session not found ❌");
+            }
+
+            // 🔒 Security check
+            sessionService.validateTeacherOwnership(session, userDetails.getUser());
+
+            String token = session.getQrToken();
+
+            // 🔴 IMPORTANT CHECK
+            if (token == null || token.isEmpty()) {
+                return ResponseEntity.badRequest().body("QR Token is NULL ❌");
+            }
+
+            // ✅ FINAL QR URL (Student Page)
+            String attendanceUrl =
+                    "https://qr-attendance-frontend.vercel.app/?page=student&token=" + token;
+
+            System.out.println("QR URL: " + attendanceUrl);
+
+            // ✅ Generate QR
+            String base64Qr = QrCodeGenerator.toBase64Png(attendanceUrl, 320, 320);
+
+            return ResponseEntity.ok(
+                    new AttendanceDtos.GenerateQrResponse(
+                            session.getId(),
+                            base64Qr,
+                            token,
+                            attendanceUrl,
+                            session.getEndAt()
+                    )
+            );
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.internalServerError()
+                    .body("QR Generation Failed ❌: " + e.getMessage());
         }
-
-        sessionService.validateTeacherOwnership(session, userDetails.getUser());
-
-        // 🔥 YOUR UPDATED URL
-        String token = session.getQrToken();
-        String attendanceUrl = "https://qr-attendance-frontend.vercel.app/?page=student&token=" + token;
-
-        String base64Qr = QrCodeGenerator.toBase64Png(attendanceUrl, 320, 320);
-
-        return ResponseEntity.ok(
-                new AttendanceDtos.GenerateQrResponse(
-                        session.getId(),
-                        base64Qr,
-                        token,
-                        attendanceUrl,
-                        session.getEndAt()
-                )
-        );
     }
 
     // ✅ GET ATTENDANCE
