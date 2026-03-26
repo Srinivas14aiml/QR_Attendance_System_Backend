@@ -73,7 +73,7 @@ public class SecurityConfig {
         List<String> allowedOriginPatterns = new ArrayList<>(List.of(
                 "http://localhost:3000",
                 "http://127.0.0.1:3000",
-                "https://*.onrender.com"
+                "https://qr-attendance-system-frontend.vercel.app"
         ));
         allowedOriginPatterns.add(frontendBaseUrl);
         configuration.setAllowedOriginPatterns(allowedOriginPatterns);
